@@ -1,3 +1,3 @@
 package com.example.ZTI_API.Models
 
-data class Comment(val id:Int,val postId:Int,val userId:Int,val content:String)
+data class Comment(val postId:String,val username:String,val content:String,val likeCount:Int)
