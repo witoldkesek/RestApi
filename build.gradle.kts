@@ -25,6 +25,8 @@ dependencies {
 	//implementation ("org.mongodb:mongodb-driver-sync:4.2.3")
 	implementation ("org.mongodb:mongodb-driver:3.4.3")
 	implementation ("org.mongodb:mongodb-driver-core:3.4.3")
+	implementation("io.jsonwebtoken:jjwt:0.2")
+	implementation("javax.xml.bind:jaxb-api:2.3.1")
 	runtimeOnly("com.h2database:h2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
