@@ -139,7 +139,7 @@ class HelloWorldController {
 		tmpMemesWithId.clear()
 		while (results.hasNext()) {
 						val result=results.next()
-						tmpMemesWithId.add(MemeWithId(result.getObjectId("_id").toHexString(),result.getString("name"),result.getString("desc"),result.getInteger("likeCount"),result.getString("imgAddress")))
+						tmpMemesWithId.add(MemeWithId(result.getObjectId("_id").toHexString(),result.getString("category"),result.getString("name"),result.getString("desc"),result.getInteger("likeCount"),result.getString("imgAddress")))
 		}
 		mongoClient.close()
 		return ResponseEntity.ok<Any>(tmpMemesWithId)
@@ -156,7 +156,24 @@ class HelloWorldController {
 		tmpMemesWithId.clear()
 		while (results.hasNext()) {
 			val result=results.next()
-			tmpMemesWithId.add(MemeWithId(result.getObjectId("_id").toHexString(),result.getString("name"),result.getString("desc"),result.getInteger("likeCount"),result.getString("imgAddress")))
+			tmpMemesWithId.add(MemeWithId(result.getObjectId("_id").toHexString(),result.getString("category"),result.getString("name"),result.getString("desc"),result.getInteger("likeCount"),result.getString("imgAddress")))
+		}
+		mongoClient.close()
+		return ResponseEntity.ok<Any>(tmpMemesWithId)
+	}
+
+	@RequestMapping(value = ["/memes/category/{category}"], method = [RequestMethod.GET])
+	fun memesGetByCategory(@PathVariable("category") category: String): ResponseEntity<*>? {
+		val uri = MongoClientURI("mongodb://admin:123@zadb-shard-00-00.l9t9j.mongodb.net:27017,zadb-shard-00-01.l9t9j.mongodb.net:27017,zadb-shard-00-02.l9t9j.mongodb.net:27017/zti_project?ssl=true&replicaSet=atlas-eq1sic-shard-0&authSource=admin&retryWrites=true&w=majority")
+		val mongoClient = MongoClient(uri)
+		val database = mongoClient.getDatabase("zti_project")
+		val collection = database.getCollection("memes")
+		val idDoc=Document("category",category)
+		val results = collection.find(idDoc).iterator()
+		tmpMemesWithId.clear()
+		while (results.hasNext()) {
+			val result=results.next()
+			tmpMemesWithId.add(MemeWithId(result.getObjectId("_id").toHexString(),result.getString("category"),result.getString("name"),result.getString("desc"),result.getInteger("likeCount"),result.getString("imgAddress")))
 		}
 		mongoClient.close()
 		return ResponseEntity.ok<Any>(tmpMemesWithId)
@@ -169,7 +186,7 @@ class HelloWorldController {
 		val mongoClient = MongoClient(uri)
 		val database = mongoClient.getDatabase("zti_project")
 		val collection = database.getCollection("memes")
-		val memeDoc = Document("name",meme.name).append("desc",meme.desc).append("likeCount",meme.likeCount).append("imgAddress",meme.imgAddress)
+		val memeDoc = Document("category",meme.category).append("name",meme.name).append("desc",meme.desc).append("likeCount",meme.likeCount).append("imgAddress",meme.imgAddress)
 		collection.insertOne(memeDoc)
 		mongoClient.close()
 		return ResponseEntity("Meme posted", HttpStatus.OK)
