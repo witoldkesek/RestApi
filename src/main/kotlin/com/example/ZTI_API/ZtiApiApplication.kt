@@ -3,10 +3,7 @@ package com.example.ZTI_API
 import com.example.ZTI_API.Authentications.AuthenticationRequest
 import com.example.ZTI_API.Authentications.AuthenticationResponse
 import com.example.ZTI_API.Filters.JwtRequestFilter
-import com.example.ZTI_API.Models.Comment
-import com.example.ZTI_API.Models.Meme
-import com.example.ZTI_API.Models.MemeWithId
-import com.example.ZTI_API.Models.UserSample
+import com.example.ZTI_API.Models.*
 import com.example.ZTI_API.Utils.JwtUtil
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientURI
@@ -192,6 +189,18 @@ class HelloWorldController {
 		return ResponseEntity("Meme posted", HttpStatus.OK)
 	}
 
+	@RequestMapping(value = ["/memes/{id}"], method = [RequestMethod.DELETE])
+	fun memesDeleteById(@PathVariable("id") id: String): ResponseEntity<*>? {
+		val uri = MongoClientURI("mongodb://admin:123@zadb-shard-00-00.l9t9j.mongodb.net:27017,zadb-shard-00-01.l9t9j.mongodb.net:27017,zadb-shard-00-02.l9t9j.mongodb.net:27017/zti_project?ssl=true&replicaSet=atlas-eq1sic-shard-0&authSource=admin&retryWrites=true&w=majority")
+		val mongoClient = MongoClient(uri)
+		val database = mongoClient.getDatabase("zti_project")
+		val collection = database.getCollection("memes")
+		val idDoc=Document("_id",ObjectId(id))
+		collection.deleteOne(idDoc)
+		mongoClient.close()
+		return ResponseEntity.ok<Any>("Pomyslnie usunieto mem.")
+	}
+
 	@RequestMapping(value = ["/comments"], method = [RequestMethod.POST])
 	fun commentPOST(@RequestBody comment: Comment): ResponseEntity<String?>? {
 
@@ -213,15 +222,26 @@ class HelloWorldController {
 		val collection = database.getCollection("comments")
 		val idDoc=Document("postId",ObjectId(postId))
 		val results = collection.find(idDoc).iterator()
-		tmpComments.clear()
+		val tmpCommentsWithId =mutableListOf<CommentWithId>()
 		while (results.hasNext()) {
 			val result=results.next()
-			tmpComments.add(Comment(result.getObjectId("postId").toHexString(),result.getString("username"),result.getString("content"),result.getInteger("likeCount")))
+			tmpCommentsWithId.add(CommentWithId(result.getObjectId("_id").toHexString(),result.getObjectId("postId").toHexString(),result.getString("username"),result.getString("content"),result.getInteger("likeCount")))
 		}
 		mongoClient.close()
-		return ResponseEntity.ok<Any>(tmpComments)
+		return ResponseEntity.ok<Any>(tmpCommentsWithId)
 	}
 
+	@RequestMapping(value = ["/comments/{id}"], method = [RequestMethod.DELETE])
+	fun commentsDeleteById(@PathVariable("id") id: String): ResponseEntity<*>? {
+		val uri = MongoClientURI("mongodb://admin:123@zadb-shard-00-00.l9t9j.mongodb.net:27017,zadb-shard-00-01.l9t9j.mongodb.net:27017,zadb-shard-00-02.l9t9j.mongodb.net:27017/zti_project?ssl=true&replicaSet=atlas-eq1sic-shard-0&authSource=admin&retryWrites=true&w=majority")
+		val mongoClient = MongoClient(uri)
+		val database = mongoClient.getDatabase("zti_project")
+		val collection = database.getCollection("comments")
+		val idDoc=Document("_id",ObjectId(id))
+		collection.deleteOne(idDoc)
+		mongoClient.close()
+		return ResponseEntity.ok<Any>("Pomyslnie usunieto mem.")
+	}
 
 }
 fun main(args: Array<String>) {
