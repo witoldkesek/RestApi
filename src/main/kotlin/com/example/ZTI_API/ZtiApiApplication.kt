@@ -35,11 +35,6 @@ import java.util.*
 @SpringBootApplication
 class ZtiApiApplication
 val tmpMemesWithId= mutableListOf<MemeWithId>()
-val tmpComments =mutableListOf<Comment>()
-fun user(user: String, pw: String, vararg roles: String) =
-		User.withDefaultPasswordEncoder().username(user).password(pw).roles(*roles).build()
-val users= mutableListOf(user("user", "pw", "USER"), user("wiciu", "123", "USER", "ADMIN"))
-
 @EnableWebSecurity
 internal class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 	@Autowired
