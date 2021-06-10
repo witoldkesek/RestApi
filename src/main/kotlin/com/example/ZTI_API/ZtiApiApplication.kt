@@ -29,6 +29,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.bind.annotation.*
+import java.io.File
 import java.sql.*
 import java.util.*
 
@@ -71,8 +72,7 @@ internal class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
 @RestController
 class HelloWorldController {
-
-
+	val login = File("login.txt").readText()
 	@Autowired
 	private val authenticationManager: AuthenticationManager? = null
 
@@ -102,7 +102,7 @@ class HelloWorldController {
 
 	@RequestMapping(value = ["/register"], method = [RequestMethod.POST])
 	fun postUser(@RequestBody user: UserSample): ResponseEntity<String?>? {
-		val uri = MongoClientURI("mongodb://admin:123@zadb-shard-00-00.l9t9j.mongodb.net:27017,zadb-shard-00-01.l9t9j.mongodb.net:27017,zadb-shard-00-02.l9t9j.mongodb.net:27017/zti_project?ssl=true&replicaSet=atlas-eq1sic-shard-0&authSource=admin&retryWrites=true&w=majority")
+		val uri = MongoClientURI(login)
 		val mongoClient = MongoClient(uri)
 		val database = mongoClient.getDatabase("zti_project")
 		val collection = database.getCollection("users")
@@ -122,8 +122,7 @@ class HelloWorldController {
 	//memes
 	@RequestMapping(value = ["/memes"], method = [RequestMethod.GET])
 	fun memesGET(): ResponseEntity<*>? {
-		val uri = MongoClientURI(
-							"mongodb://admin:123@zadb-shard-00-00.l9t9j.mongodb.net:27017,zadb-shard-00-01.l9t9j.mongodb.net:27017,zadb-shard-00-02.l9t9j.mongodb.net:27017/zti_project?ssl=true&replicaSet=atlas-eq1sic-shard-0&authSource=admin&retryWrites=true&w=majority")
+		val uri = MongoClientURI(login)
 		val mongoClient = MongoClient(uri)
 		val database = mongoClient.getDatabase("zti_project")
 		val collection = database.getCollection("memes")
@@ -139,7 +138,7 @@ class HelloWorldController {
 
 	@RequestMapping(value = ["/memes/{id}"], method = [RequestMethod.GET])
 	fun memesGetById(@PathVariable("id") id: String): ResponseEntity<*>? {
-		val uri = MongoClientURI("mongodb://admin:123@zadb-shard-00-00.l9t9j.mongodb.net:27017,zadb-shard-00-01.l9t9j.mongodb.net:27017,zadb-shard-00-02.l9t9j.mongodb.net:27017/zti_project?ssl=true&replicaSet=atlas-eq1sic-shard-0&authSource=admin&retryWrites=true&w=majority")
+		val uri = MongoClientURI(login)
 		val mongoClient = MongoClient(uri)
 		val database = mongoClient.getDatabase("zti_project")
 		val collection = database.getCollection("memes")
@@ -156,7 +155,7 @@ class HelloWorldController {
 
 	@RequestMapping(value = ["/memes/category/{category}"], method = [RequestMethod.GET])
 	fun memesGetByCategory(@PathVariable("category") category: String): ResponseEntity<*>? {
-		val uri = MongoClientURI("mongodb://admin:123@zadb-shard-00-00.l9t9j.mongodb.net:27017,zadb-shard-00-01.l9t9j.mongodb.net:27017,zadb-shard-00-02.l9t9j.mongodb.net:27017/zti_project?ssl=true&replicaSet=atlas-eq1sic-shard-0&authSource=admin&retryWrites=true&w=majority")
+		val uri = MongoClientURI(login)
 		val mongoClient = MongoClient(uri)
 		val database = mongoClient.getDatabase("zti_project")
 		val collection = database.getCollection("memes")
@@ -174,7 +173,7 @@ class HelloWorldController {
 	@RequestMapping(value = ["/memes"], method = [RequestMethod.POST])
 	fun memePOST(@RequestBody meme: Meme): ResponseEntity<String?>? {
 
-		val uri = MongoClientURI("mongodb://admin:123@zadb-shard-00-00.l9t9j.mongodb.net:27017,zadb-shard-00-01.l9t9j.mongodb.net:27017,zadb-shard-00-02.l9t9j.mongodb.net:27017/zti_project?ssl=true&replicaSet=atlas-eq1sic-shard-0&authSource=admin&retryWrites=true&w=majority")
+		val uri = MongoClientURI(login)
 		val mongoClient = MongoClient(uri)
 		val database = mongoClient.getDatabase("zti_project")
 		val collection = database.getCollection("memes")
@@ -186,7 +185,7 @@ class HelloWorldController {
 
 	@RequestMapping(value = ["/memes/{id}"], method = [RequestMethod.DELETE])
 	fun memesDeleteById(@PathVariable("id") id: String): ResponseEntity<*>? {
-		val uri = MongoClientURI("mongodb://admin:123@zadb-shard-00-00.l9t9j.mongodb.net:27017,zadb-shard-00-01.l9t9j.mongodb.net:27017,zadb-shard-00-02.l9t9j.mongodb.net:27017/zti_project?ssl=true&replicaSet=atlas-eq1sic-shard-0&authSource=admin&retryWrites=true&w=majority")
+		val uri = MongoClientURI(login)
 		val mongoClient = MongoClient(uri)
 		val database = mongoClient.getDatabase("zti_project")
 		val collection = database.getCollection("memes")
@@ -199,7 +198,7 @@ class HelloWorldController {
 	@RequestMapping(value = ["/comments"], method = [RequestMethod.POST])
 	fun commentPOST(@RequestBody comment: Comment): ResponseEntity<String?>? {
 
-		val uri = MongoClientURI("mongodb://admin:123@zadb-shard-00-00.l9t9j.mongodb.net:27017,zadb-shard-00-01.l9t9j.mongodb.net:27017,zadb-shard-00-02.l9t9j.mongodb.net:27017/zti_project?ssl=true&replicaSet=atlas-eq1sic-shard-0&authSource=admin&retryWrites=true&w=majority")
+		val uri = MongoClientURI(login)
 		val mongoClient = MongoClient(uri)
 		val database = mongoClient.getDatabase("zti_project")
 		val collection = database.getCollection("comments")
@@ -211,7 +210,7 @@ class HelloWorldController {
 
 	@RequestMapping(value = ["/comments/{postId}"], method = [RequestMethod.GET])
 	fun commentsGetByPostId(@PathVariable("postId") postId: String): ResponseEntity<*>? {
-		val uri = MongoClientURI("mongodb://admin:123@zadb-shard-00-00.l9t9j.mongodb.net:27017,zadb-shard-00-01.l9t9j.mongodb.net:27017,zadb-shard-00-02.l9t9j.mongodb.net:27017/zti_project?ssl=true&replicaSet=atlas-eq1sic-shard-0&authSource=admin&retryWrites=true&w=majority")
+		val uri = MongoClientURI(login)
 		val mongoClient = MongoClient(uri)
 		val database = mongoClient.getDatabase("zti_project")
 		val collection = database.getCollection("comments")
@@ -228,14 +227,14 @@ class HelloWorldController {
 
 	@RequestMapping(value = ["/comments/{id}"], method = [RequestMethod.DELETE])
 	fun commentsDeleteById(@PathVariable("id") id: String): ResponseEntity<*>? {
-		val uri = MongoClientURI("mongodb://admin:123@zadb-shard-00-00.l9t9j.mongodb.net:27017,zadb-shard-00-01.l9t9j.mongodb.net:27017,zadb-shard-00-02.l9t9j.mongodb.net:27017/zti_project?ssl=true&replicaSet=atlas-eq1sic-shard-0&authSource=admin&retryWrites=true&w=majority")
+		val uri = MongoClientURI(login)
 		val mongoClient = MongoClient(uri)
 		val database = mongoClient.getDatabase("zti_project")
 		val collection = database.getCollection("comments")
 		val idDoc=Document("_id",ObjectId(id))
 		collection.deleteOne(idDoc)
 		mongoClient.close()
-		return ResponseEntity.ok<Any>("Pomyslnie usunieto mem.")
+		return ResponseEntity.ok<Any>("Pomyslnie usunieto komentarz.")
 	}
 
 }

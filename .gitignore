@@ -10,6 +10,10 @@ build/
 *.iws
 *.iml
 *.ipr
+*.zipp
+*.zip
+*.pdf
+*.txt
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
