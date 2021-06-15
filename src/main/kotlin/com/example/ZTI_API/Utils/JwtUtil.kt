@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
+import java.io.File
 import java.util.*
 import java.util.function.Function
 import kotlin.collections.HashMap
@@ -12,7 +13,7 @@ import kotlin.collections.HashMap
 
 @Service
 class JwtUtil {
-    private val SECRET_KEY = "secret"
+    private val SECRET_KEY = File("key.txt").readText()
     fun extractUsername(token: String?): String {
         return extractClaim(token) { obj: Claims? -> obj!!.subject }
     }

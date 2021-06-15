@@ -38,6 +38,7 @@ class ZtiApiApplication
 val tmpMemesWithId= mutableListOf<MemeWithId>()
 @EnableWebSecurity
 internal class WebSecurityConfig : WebSecurityConfigurerAdapter() {
+
 	@Autowired
 	private val myUserDetailsService: UserDetailsService? = null
 
