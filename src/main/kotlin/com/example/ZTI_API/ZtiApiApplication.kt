@@ -74,6 +74,7 @@ internal class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 @RestController
 class HelloWorldController {
 	val login = File("login.txt").readText()
+
 	@Autowired
 	private val authenticationManager: AuthenticationManager? = null
 
